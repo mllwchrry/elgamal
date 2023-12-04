@@ -29,7 +29,7 @@ def verify(m, pk, signature):
     return False
 
 
-pk, sk, g, p = generate_keypair(32)
+pk, sk, g, p = generate_keypair(2048)
 
 message = 'Hello, World!'
 message1 = 'Hello, World'
