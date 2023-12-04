@@ -29,6 +29,7 @@ def split_utf8_integer(integer):
 
 
 def encrypt(msg, pk):
+    y, g, p = pk
     k = random.randint(2, p - 1)
 
     while gcd(k, p - 1) != 1:
@@ -40,34 +41,17 @@ def encrypt(msg, pk):
 
     a = pow(g, k, p)
     for i in range(len(blocks)):
-        cb.append(pow(pk, k, p) * blocks[i] % p)
+        cb.append(pow(y, k, p) * blocks[i] % p)
 
     return a, cb
 
 
 def decrypt(c, sk):
+    x, g, p = sk
     a, cb = c
     result = ''
     for i in range(len(cb)):
-        decrypted = cb[i] * pow(a, p - 1 - sk, p) % p
+        decrypted = cb[i] * pow(a, p - 1 - x, p) % p
         result += str(decrypted)
 
     return int_to_text(int(result))
-
-
-pk, sk, g, p = generate_keypair(32)
-
-
-message = ('Алгоритм Ель-Гамаля був запропонований Тахіром Ель-Гамалем у 1985 році як '
-           'поліпшена версія алгоритму Діффі-Хеллмана. Він удосконалив систему Діффі-Хеллмана '
-           'і створив два алгоритми – один для шифрування, інший для автентифікації. '
-           'Одна з переваг алгоритму Ель-Гамаля полягає в тому, що він не підлягає патентуванню, '
-           'що робило його доступним і економічно вигідним в порівнянні з RSA, де потрібна '
-           'була ліцензійна оплата до закінчення строку дії патенту у 2000 році')
-
-ciphertext = encrypt(message, pk)
-plaintext = decrypt(ciphertext, sk)
-
-print(f"Message: {message}")
-print(f"Encrypted: {ciphertext}")
-print(f"Decrypted: {plaintext}")

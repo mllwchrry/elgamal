@@ -57,4 +57,4 @@ def generate_keypair(bit_length):
     while gcd(p, sk) != 1:
         sk = random.randint(1, p - 2)
     pk = pow(g, sk, p)
-    return pk, sk, g, p
+    return (pk, g, p), (sk, g, p)
