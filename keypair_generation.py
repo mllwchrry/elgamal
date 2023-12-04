@@ -44,28 +44,10 @@ def gcd(a, b):
 
 
 def get_primitive_root(p):
-    if p == 2:
-        return 1
-
-    factors = prime_factors(p - 1)
-    for a in range(2, p):
-        if all(pow(a, (p - 1) // f, p) != 1 for f in factors):
-            return a
-    raise ValueError('No primitive root of %d found' % p)
-
-
-def prime_factors(n):
-    factors = []
-    i = 2
-    while i * i <= n:
-        if n % i:
-            i += 1
-        else:
-            n //= i
-            factors.append(i)
-    if n > 1:
-        factors.append(n)
-    return factors
+    for i in range(2, p):
+        if gcd(i, p - 1) == 1:
+            return i
+    raise ValueError("Impossible to find primitive root")
 
 
 def generate_keypair(bit_length):
